@@ -3,7 +3,8 @@
 To create a docker container with postgres database run a following command:
 
 ```dockerfile
-docker run -e POSTGRES_USER=libraryPostgres -e POSTGRES_PASSWORD=libraryPostgres -p 5432:5432 --name libraryPostgresDB postgres
+docker build --tag=image_with_postgres .
+docker run -d -p 5432:5432 --name libraryPostgresDB image_with_postgres
 ```
 
 # Endpoints
