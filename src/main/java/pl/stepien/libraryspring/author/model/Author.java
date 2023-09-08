@@ -4,8 +4,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Author
 {
     @Id
@@ -17,55 +25,4 @@ public class Author
     private String surname;
 
     private String country;
-
-    public Author()
-    {
-    }
-
-    public Author(final String name, final String surname, final String country)
-    {
-        this.name = name;
-        this.surname = surname;
-        this.country = country;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setId(final Long id)
-    {
-        this.id = id;
-    }
-
-    public void setName(final String name)
-    {
-        this.name = name;
-    }
-
-    public String getSurname()
-    {
-        return surname;
-    }
-
-    public void setSurname(final String surnname)
-    {
-        this.surname = surnname;
-    }
-
-    public String getCountry()
-    {
-        return country;
-    }
-
-    public void setCountry(final String country)
-    {
-        this.country = country;
-    }
 }
