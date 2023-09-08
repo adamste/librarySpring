@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import pl.stepien.libraryspring.author.model.Author;
+import pl.stepien.libraryspring.author.model.AuthorRecord;
 import pl.stepien.libraryspring.author.service.AuthorService;
 
 @RestController
@@ -19,8 +19,8 @@ public class AuthorController
     }
 
     @GetMapping("/allAuthors")
-    public List<Author> showAllAuthors()
+    public List<AuthorRecord> showAllAuthors()
     {
-        return authorService.getAuthors();
+        return authorService.getAuthorsRecords();
     }
 }
