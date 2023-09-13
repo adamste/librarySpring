@@ -5,12 +5,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import pl.stepien.libraryspring.author.model.AuthorRecord;
 import pl.stepien.libraryspring.author.repository.AuthorRepository;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthorService
 {
     private final AuthorRepository authorRepository;
