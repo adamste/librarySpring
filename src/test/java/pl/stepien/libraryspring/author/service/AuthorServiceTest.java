@@ -28,7 +28,8 @@ class AuthorServiceTest
     void getAuthorRecordsWhenCorrectData()
     {
         //given
-        Mockito.when(authorRepository.findAll()).thenReturn(List.of(new Author(1L, "name", "surname", "country")));
+        final Author author = new Author(1L, "name", "surname", "country", 999999999L, false);
+        Mockito.when(authorRepository.findAll()).thenReturn(List.of(author));
         //when
         final List<AuthorRecord> result = authorService.getAuthorsRecords();
         //then

@@ -20,14 +20,13 @@ public class DataSetup implements CommandLineRunner
     public void run(String... args) throws Exception
     {
         final List<Author> authors = List.of(
-            new Author("Jarosław", "Krygier", "Poland"),
-            new Author("Piotr", "Kaniewski", "Poland"),
-            new Author("Jerzy", "Osiowski", "Poland"),
-            new Author("Jerzy", "Szabatin", "Poland"),
-            new Author("Jerzy", "Szabatin", "Poland"),
-            new Author("Robert", "Resnick", "USA"),
-            new Author("David", "Halliday", "USA"),
-            new Author("Joseph", "Gay-Lussac", "France")
+            new Author("Jarosław", "Krygier", "Poland", 80112586191L, true),
+            new Author("Piotr", "Kaniewski", "Poland", 49032045991L, false),
+            new Author("Jerzy", "Osiowski", "Poland", 64120567892L, true),
+            new Author("Jerzy", "Szabatin", "Poland", 59091588744L, false),
+            new Author("Robert", "Resnick", "USA", 84011872818L, true),
+            new Author("David", "Halliday", "USA", 86122497696L, false),
+            new Author("Joseph", "Gay-Lussac", "France", 68111421336L, false)
         );
         authorRepository.saveAll(authors);
     }

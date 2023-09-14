@@ -1,0 +1,3 @@
+ALTER TABLE author
+    ADD pesel BIGINT,
+    ADD is_alive BOOLEAN DEFAULT FALSE;

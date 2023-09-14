@@ -18,7 +18,9 @@ public class AuthorService
     public List<AuthorRecord> getAuthorsRecords()
     {
         return authorRepository.findAll().stream()
-                               .map(entity -> new AuthorRecord(entity.getId(), entity.getName(), entity.getSurname(), entity.getCountry()))
+                               .map(entity ->
+                                        new AuthorRecord(entity.getId(), entity.getName(), entity.getSurname(),
+                                                         entity.getCountry(), entity.getPesel(), entity.isAlive()))
                                .collect(Collectors.toList());
     }
 }
