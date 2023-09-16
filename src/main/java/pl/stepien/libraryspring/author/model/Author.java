@@ -31,13 +31,4 @@ public class Author
     private Long pesel;
 
     private boolean isAlive;
-
-    public Author(String name, String surname, String country, Long pesel, boolean isAlive)
-    {
-        this.name = name;
-        this.surname = surname;
-        this.country = country;
-        this.pesel = pesel;
-        this.isAlive = isAlive;
-    }
 }
