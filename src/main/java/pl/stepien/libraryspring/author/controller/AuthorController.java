@@ -3,6 +3,7 @@ package pl.stepien.libraryspring.author.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.hateoas.CollectionModel;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import lombok.RequiredArgsConstructor;
 import pl.stepien.libraryspring.author.model.Author;
@@ -77,31 +79,52 @@ public class AuthorController
     @PutMapping(value = "/authors/{id}")
     public ResponseEntity<EntityModel<Author>> updateAuthor(@PathVariable long id, @RequestBody AuthorRecord author)
     {
-        final Author entity = authorService.saveAuthor(author, id);
-        return ResponseEntity.ok().body(
-            EntityModel.of(entity,
-                           linkTo(methodOn(AuthorController.class).showAuthor(id)).withSelfRel(),
-                           linkTo(methodOn(AuthorController.class).showAllAuthors()).withRel("/authors")
-            ));
+        try
+        {
+            final Author entity = authorService.updateAuthor(author, id);
+            return ResponseEntity.ok().body(
+                EntityModel.of(entity,
+                               linkTo(methodOn(AuthorController.class).showAuthor(id)).withSelfRel(),
+                               linkTo(methodOn(AuthorController.class).showAllAuthors()).withRel("/authors")
+                ));
+        }
+        catch (IOException e)
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found", e);
+        }
     }
 
     @DeleteMapping(value = "/authors/{id}")
     public ResponseEntity<EntityModel<Object>> deleteAuthor(@PathVariable("id") long id)
     {
-        authorService.deleteAuthor(id);
-        return ResponseEntity.ok().body(
-            EntityModel.of(linkTo(methodOn(AuthorController.class).showAllAuthors()).withRel("/authors")
-            ));
+        try
+        {
+            authorService.deleteAuthor(id);
+            return ResponseEntity.ok().body(
+                EntityModel.of(linkTo(methodOn(AuthorController.class).showAllAuthors()).withRel("/authors")
+                ));
+        }
+        catch (Exception e)
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found", e);
+        }
     }
 
     @PatchMapping(value = "/authors/{id}")
     public ResponseEntity<EntityModel<Author>> partialUpdate(@RequestBody AuthorRecord partial, @PathVariable long id)
     {
-        final Author entity = authorService.saveAuthor(partial, id);
-        return ResponseEntity.ok().body(
-            EntityModel.of(entity,
-                           linkTo(methodOn(AuthorController.class).showAuthor(id)).withSelfRel(),
-                           linkTo(methodOn(AuthorController.class).showAllAuthors()).withRel("/authors")
-            ));
+        try
+        {
+            final Author entity = authorService.updateAuthor(partial, id);
+            return ResponseEntity.ok().body(
+                EntityModel.of(entity,
+                               linkTo(methodOn(AuthorController.class).showAuthor(id)).withSelfRel(),
+                               linkTo(methodOn(AuthorController.class).showAllAuthors()).withRel("/authors")
+                ));
+        }
+        catch (IOException e)
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found", e);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package pl.stepien.libraryspring.author.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,8 +37,28 @@ public class AuthorService
         return authorRepository.save(new Author(id, author.name(), author.surname(), author.country(), author.pesel(), author.isAlive()));
     }
 
-    public void deleteAuthor(long id)
+    public Author updateAuthor(AuthorRecord author, Long id) throws IOException
     {
-        authorRepository.deleteById(id);
+        if (authorRepository.findById(id).isPresent())
+        {
+            return authorRepository.save(
+                new Author(id, author.name(), author.surname(), author.country(), author.pesel(), author.isAlive()));
+        }
+        else
+        {
+            throw new IOException("coudn't find an author with id " + id);
+        }
+    }
+
+    public void deleteAuthor(long id) throws IOException
+    {
+        if (authorRepository.findById(id).isPresent())
+        {
+            authorRepository.deleteById(id);
+        }
+        else
+        {
+            throw new IOException("coudn't find an author with id " + id);
+        }
     }
 }
