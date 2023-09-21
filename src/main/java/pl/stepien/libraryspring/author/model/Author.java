@@ -31,4 +31,13 @@ public class Author
     private Long pesel;
 
     private boolean isAlive;
+
+    public static class Factory
+    {
+        public static Author create(AuthorRecord authorRecord)
+        {
+            return new Author(null, authorRecord.name(), authorRecord.surname(), authorRecord.country(),
+                              authorRecord.pesel(), authorRecord.isAlive());
+        }
+    }
 }

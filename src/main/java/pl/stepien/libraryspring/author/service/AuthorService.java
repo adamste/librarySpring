@@ -1,6 +1,5 @@
 package pl.stepien.libraryspring.author.service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -8,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import pl.stepien.libraryspring.author.exceptions.UserNotFoundException;
 import pl.stepien.libraryspring.author.model.Author;
 import pl.stepien.libraryspring.author.model.AuthorRecord;
 import pl.stepien.libraryspring.author.repository.AuthorRepository;
@@ -27,38 +27,59 @@ public class AuthorService
                                .collect(Collectors.toList());
     }
 
-    public Optional<Author> getById(long id)
+    public Optional<AuthorRecord> getById(long id)
     {
-        return authorRepository.findById(id);
+        return authorRepository.findById(id).map(
+            a -> new AuthorRecord(a.getId(), a.getName(), a.getSurname(), a.getCountry(), a.getPesel(), a.isAlive()));
     }
 
-    public Author saveAuthor(AuthorRecord author, Long id)
+    public AuthorRecord createAuthor(AuthorRecord author)
     {
-        return authorRepository.save(new Author(id, author.name(), author.surname(), author.country(), author.pesel(), author.isAlive()));
+        final Author entity = authorRepository.save(Author.Factory.create(author));
+        return new AuthorRecord(entity.getId(), entity.getName(), entity.getSurname(), entity.getCountry(), entity.getPesel(),
+                                entity.isAlive());
     }
 
-    public Author updateAuthor(AuthorRecord author, Long id) throws IOException
+    public AuthorRecord updateAuthor(AuthorRecord author, Long id)
     {
-        if (authorRepository.findById(id).isPresent())
-        {
-            return authorRepository.save(
-                new Author(id, author.name(), author.surname(), author.country(), author.pesel(), author.isAlive()));
-        }
-        else
-        {
-            throw new IOException("coudn't find an author with id " + id);
-        }
+        final Author authorFromDB = authorRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+
+        authorFromDB.setId(author.id());
+        authorFromDB.setName(author.name());
+        authorFromDB.setSurname(author.surname());
+        authorFromDB.setCountry(author.country());
+        authorFromDB.setPesel(author.pesel());
+        authorFromDB.setAlive(author.isAlive());
+
+        final Author entity = authorRepository.save(authorFromDB);
+        return new AuthorRecord(entity.getId(), entity.getName(), entity.getSurname(), entity.getCountry(), entity.getPesel(),
+                                entity.isAlive());
     }
 
-    public void deleteAuthor(long id) throws IOException
+    public void deleteAuthor(long id)
     {
-        if (authorRepository.findById(id).isPresent())
+        final boolean exists = authorRepository.existsById(id);
+        if (exists)
         {
             authorRepository.deleteById(id);
         }
+        throw new UserNotFoundException();
+    }
+
+    public AuthorRecord patchAlive(boolean isAlive, long id)
+    {
+        final Optional<Author> entity = authorRepository.findById(id);
+        if (entity.isPresent())
+        {
+            final Author author = entity.get();
+            author.setAlive(isAlive);
+            authorRepository.save(author);
+            return new AuthorRecord(author.getId(), author.getName(), author.getSurname(),
+                                    author.getCountry(), author.getPesel(), author.isAlive());
+        }
         else
         {
-            throw new IOException("coudn't find an author with id " + id);
+            throw new UserNotFoundException();
         }
     }
 }

@@ -19,6 +19,8 @@ public class DataSetup implements CommandLineRunner
     @Override
     public void run(String... args) throws Exception
     {
+        authorRepository.deleteAll();
+
         final List<Author> authors = List.of(
             new Author(null, "Jarosław", "Krygier", "Poland", 80112586191L, true),
             new Author(null, "Piotr", "Kaniewski", "Poland", 49032045991L, false),
