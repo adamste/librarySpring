@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import pl.stepien.libraryspring.author.exceptions.UserNotFoundException;
+import pl.stepien.libraryspring.author.exceptions.AuthorNotFoundException;
 import pl.stepien.libraryspring.author.model.Author;
 import pl.stepien.libraryspring.author.model.AuthorRecord;
 import pl.stepien.libraryspring.author.repository.AuthorRepository;
@@ -42,13 +42,13 @@ public class AuthorService
 
     public AuthorRecord updateAuthor(AuthorRecord author, Long id)
     {
-        final Author authorFromDB = authorRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+        final Author authorFromDB = authorRepository.findById(id).orElseThrow(() -> new AuthorNotFoundException("Won't update since no such user"));
 
-        authorFromDB.setId(author.id());
-        authorFromDB.setName(author.name());
-        authorFromDB.setSurname(author.surname());
-        authorFromDB.setCountry(author.country());
-        authorFromDB.setPesel(author.pesel());
+        authorFromDB.setId(author.getId());
+        authorFromDB.setName(author.getName());
+        authorFromDB.setSurname(author.getSurname());
+        authorFromDB.setCountry(author.getCountry());
+        authorFromDB.setPesel(author.getPesel());
         authorFromDB.setAlive(author.isAlive());
 
         final Author entity = authorRepository.save(authorFromDB);
@@ -63,7 +63,7 @@ public class AuthorService
         {
             authorRepository.deleteById(id);
         }
-        throw new UserNotFoundException();
+        throw new AuthorNotFoundException("Won't delete since no such user");
     }
 
     public AuthorRecord patchAlive(boolean isAlive, long id)
@@ -79,7 +79,7 @@ public class AuthorService
         }
         else
         {
-            throw new UserNotFoundException();
+            throw new AuthorNotFoundException("Won't patch since no such user");
         }
     }
 }
