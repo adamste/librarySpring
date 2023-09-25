@@ -36,8 +36,8 @@ public class Author
     {
         public static Author create(AuthorRecord authorRecord)
         {
-            return new Author(null, authorRecord.name(), authorRecord.surname(), authorRecord.country(),
-                              authorRecord.pesel(), authorRecord.isAlive());
+            return new Author(null, authorRecord.getName(), authorRecord.getSurname(), authorRecord.getCountry(),
+                              authorRecord.getPesel(), authorRecord.isAlive());
         }
     }
 }

@@ -55,7 +55,7 @@ public class AuthorController
         final AuthorRecord record = authorService.createAuthor(author);
         return ResponseEntity.ok().body(
             EntityModel.of(record,
-                           linkTo(methodOn(AuthorController.class).getAuthor(record.id())).withSelfRel(),
+                           linkTo(methodOn(AuthorController.class).getAuthor(record.getId())).withSelfRel(),
                            linkTo(methodOn(AuthorController.class).getAll()).withRel("/authors")
             ));
     }
