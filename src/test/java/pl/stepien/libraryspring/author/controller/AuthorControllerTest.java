@@ -37,7 +37,7 @@ public class AuthorControllerTest {
             "  \"name\": \"name\"," +
             "  \"surname\": \"surname\"," +
             "  \"country\": \"country\"," +
-            "  \"pesel\": 1," +
+            "  \"pesel\": 73091532725," +
             "  \"alive\": false" +
             "}";
 
@@ -179,7 +179,7 @@ public class AuthorControllerTest {
         this.mvc.perform(post("/authors")
                 .contentType(MediaType.APPLICATION_JSON).content(authorJson))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors").value("The PESEL can't be a negative value"));
+                .andExpect(jsonPath("$.errors").value("Please, provide a valid PESEL"));
     }
 
     @Test

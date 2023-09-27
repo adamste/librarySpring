@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import pl.stepien.libraryspring.validator.ValidPesel;
 
 @Getter
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class AuthorDTO
     @NotBlank(message = "You have to provide a correct surname")
     private String surname;
     private String country;
-    @Positive(message = "The PESEL can't be a negative value")
+    @ValidPesel
     private Long pesel;
     private boolean isAlive;
 }
