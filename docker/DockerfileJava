@@ -1,0 +1,6 @@
+FROM openjdk:17-jdk-alpine
+MAINTAINER adam.stepien1@gmail.com
+
+COPY target/nazwa.jar nazwa.jar
+
+ENTRYPOINT ["java", "-jar", "/nazwa.jar"]

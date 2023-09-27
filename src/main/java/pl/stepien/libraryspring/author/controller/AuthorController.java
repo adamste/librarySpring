@@ -5,21 +5,17 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
-import pl.stepien.libraryspring.author.model.AuthorRecord;
+import pl.stepien.libraryspring.author.exceptions.AuthorNotFoundException;
+import pl.stepien.libraryspring.author.model.AuthorDTO;
 import pl.stepien.libraryspring.author.service.AuthorService;
 
 @RestController
@@ -29,9 +25,9 @@ public class AuthorController
     private final AuthorService authorService;
 
     @GetMapping(value = "/authors")
-    public ResponseEntity<CollectionModel<AuthorRecord>> getAll()
+    public ResponseEntity<CollectionModel<AuthorDTO>> getAll()
     {
-        final List<AuthorRecord> authorsRecords = authorService.getAuthorsRecords();
+        final List<AuthorDTO> authorsRecords = authorService.getAuthorsRecords();
         return ResponseEntity.status(HttpStatus.OK).body(CollectionModel.of(authorsRecords,
                                                                             linkTo(
                                                                                 methodOn(AuthorController.class).getAll())
@@ -39,7 +35,7 @@ public class AuthorController
     }
 
     @GetMapping(value = "/authors/{id}")
-    public ResponseEntity<EntityModel<AuthorRecord>> getAuthor(@PathVariable("id") long id)
+    public ResponseEntity<EntityModel<AuthorDTO>> getAuthor(@PathVariable("id") long id)
     {
         return authorService.getById(id)
                             .map(author -> ResponseEntity.ok().body(
@@ -50,9 +46,9 @@ public class AuthorController
     }
 
     @PostMapping("/authors")
-    public ResponseEntity<EntityModel<AuthorRecord>> createAuthor(@RequestBody AuthorRecord author)
+    public ResponseEntity<EntityModel<AuthorDTO>> createAuthor(@Valid @RequestBody AuthorDTO author)
     {
-        final AuthorRecord record = authorService.createAuthor(author);
+        final AuthorDTO record = authorService.createAuthor(author);
         return ResponseEntity.ok().body(
             EntityModel.of(record,
                            linkTo(methodOn(AuthorController.class).getAuthor(record.getId())).withSelfRel(),
@@ -61,9 +57,9 @@ public class AuthorController
     }
 
     @PutMapping(value = "/authors/{id}")
-    public ResponseEntity<EntityModel<AuthorRecord>> updateAuthor(@PathVariable long id, @RequestBody AuthorRecord author)
+    public ResponseEntity<EntityModel<AuthorDTO>> updateAuthor(@PathVariable long id, @Valid @RequestBody AuthorDTO author)
     {
-        final AuthorRecord updated = authorService.updateAuthor(author, id);
+        final AuthorDTO updated = authorService.updateAuthor(author, id);
         return ResponseEntity.ok().body(
             EntityModel.of(updated,
                            linkTo(methodOn(AuthorController.class).getAuthor(id)).withSelfRel(),
@@ -81,9 +77,9 @@ public class AuthorController
     }
 
     @PatchMapping(value = "/authors/{id}/alive/{alive}")
-    public ResponseEntity<EntityModel<AuthorRecord>> partialUpdate(@PathVariable boolean alive, @PathVariable long id)
+    public ResponseEntity<EntityModel<AuthorDTO>> partialUpdate(@PathVariable boolean alive, @PathVariable long id)
     {
-        final AuthorRecord author = authorService.patchAlive(alive, id);
+        final AuthorDTO author = authorService.patchAlive(alive, id);
         return ResponseEntity.ok().body(
             EntityModel.of(author,
                            linkTo(methodOn(AuthorController.class).getAuthor(id)).withSelfRel(),

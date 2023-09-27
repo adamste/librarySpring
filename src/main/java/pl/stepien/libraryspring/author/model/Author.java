@@ -34,10 +34,10 @@ public class Author
 
     public static class Factory
     {
-        public static Author create(AuthorRecord authorRecord)
+        public static Author create(AuthorDTO authorDTO)
         {
-            return new Author(null, authorRecord.getName(), authorRecord.getSurname(), authorRecord.getCountry(),
-                              authorRecord.getPesel(), authorRecord.isAlive());
+            return new Author(null, authorDTO.getName(), authorDTO.getSurname(), authorDTO.getCountry(),
+                              authorDTO.getPesel(), authorDTO.isAlive());
         }
     }
 }

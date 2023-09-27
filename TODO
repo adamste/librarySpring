@@ -4,8 +4,6 @@ Do obejrzenia:
 - JPA               https://www.youtube.com/watch?v=UPWkpl5PL_w
 - JPA               https://www.youtube.com/watch?v=tKfDdtjYYi8
 - REST              https://www.youtube.com/watch?v=lGLGW7EOzVY
-
-
 Do przeczytania:
 https://12factor.net/
 https://tsh.io/blog/hexagonal-architecture/
@@ -14,34 +12,6 @@ https://www.restapitutorial.com/
 https://restfulapi.net/richardson-maturity-model/ (4 stopnie dojrzałości resta)
 //@Transactional (readonly, rollbackFor, propagation, isolation(4 rodzaje))
 //co to find/get/load w jpa
-
-
-
-*dopisz testy
-
-*znaleźć jakieś API dot książek (mam: https://openlibrary.org/swagger/docs#/search/read_search_authors_json_search_authors_json_get)
-    **użyć go w projekcie(webclient)
-    **użyć drugiego API i zwrócić ich wyniki za pomocą Featre z java.util.concurrent
-    **użyć wiremock
-
-*InMemory database do testów
-
-*dockeryzacja z docker-compose(baza niedostępna na zewnątrz)/https://www.baeldung.com/dockerizing-spring-boot-application
-
-*test containers
-
-*inmemory repository
-
-
-
-
-
-
-
-
-
-
-
 
 ============
 do ogarnięcia
@@ -72,29 +42,19 @@ do ogarnięcia
 
 
 
-
-
-
-
-
-
-
-
               ----------------
-nigdy nie zwracać encji do controllera
-1. valueobject = niemutowalny
-
-
-
-dodac walidacje na poz controllerow
+dodac walidacje na poziomie controllerow
 
 test containers:
 implementuje ApplicationContextInitializer<GenericApplicationContext>
 
 
 webclient do tego api
-
 dodac model ksiazek(rozszerzyc baze danych) mamy isbny
+*znaleźć jakieś API dot książek (mam: https://openlibrary.org/swagger/docs#/search/read_search_authors_json_search_authors_json_get)
+    **użyć go w projekcie(webclient)
+    **użyć drugiego API i zwrócić ich wyniki za pomocą Featre z java.util.concurrent
+    **użyć wiremock
 
 dockeryzacja
 
@@ -103,3 +63,13 @@ struktura w odpowiedziach z bledami do testow AuthorControllerTest
 
 
 //walidacja czy pesel pasuje do daty urodzenia
+
+*dopisz testy
+
+*InMemory database do testów
+
+*dockeryzacja z docker-compose(baza niedostępna na zewnątrz)/https://www.baeldung.com/dockerizing-spring-boot-application
+
+*test containers
+
+*inmemory repository

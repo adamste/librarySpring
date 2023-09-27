@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import pl.stepien.libraryspring.author.model.AuthorRecord;
+import pl.stepien.libraryspring.author.model.AuthorDTO;
 import pl.stepien.libraryspring.author.service.AuthorService;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class AuthorControllerTest {
             "  \"name\": \"name\"," +
             "  \"surname\": \"surname\"," +
             "  \"country\": \"country\"," +
-            "  \"pesel\": 0," +
+            "  \"pesel\": 1," +
             "  \"alive\": false" +
             "}";
 
@@ -45,7 +45,7 @@ public class AuthorControllerTest {
     public void givenOneAuthor_thenReturnIt_getAllAuthors() throws Exception
     {
         //given
-        final AuthorRecord author = new AuthorRecord(1L, "name", "surname", "country", 94020600570L, false);
+        final AuthorDTO author = new AuthorDTO(1L, "name", "surname", "country", 94020600570L, false);
         given(this.authorService.getAuthorsRecords()).willReturn(List.of(author));
 
         //when
@@ -54,20 +54,20 @@ public class AuthorControllerTest {
         //then
         this.mvc.perform(result)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$._embedded.authorRecordList[:1].id").value(1))
-                .andExpect(jsonPath("$._embedded.authorRecordList[:1].name").value("name"))
-                .andExpect(jsonPath("$._embedded.authorRecordList[:1].surname").value("surname"))
-                .andExpect(jsonPath("$._embedded.authorRecordList[:1].country").value("country"))
-                .andExpect(jsonPath("$._embedded.authorRecordList[:1].pesel").value(94020600570L))
-                .andExpect(jsonPath("$._embedded.authorRecordList[:1].alive").value(false))
-                .andExpect(jsonPath("$._embedded.authorRecordList[:1].alive").value(false))
+                .andExpect(jsonPath("$._embedded.authorDTOList[:1].id").value(1))
+                .andExpect(jsonPath("$._embedded.authorDTOList[:1].name").value("name"))
+                .andExpect(jsonPath("$._embedded.authorDTOList[:1].surname").value("surname"))
+                .andExpect(jsonPath("$._embedded.authorDTOList[:1].country").value("country"))
+                .andExpect(jsonPath("$._embedded.authorDTOList[:1].pesel").value(94020600570L))
+                .andExpect(jsonPath("$._embedded.authorDTOList[:1].alive").value(false))
+                .andExpect(jsonPath("$._embedded.authorDTOList[:1].alive").value(false))
                 .andExpect(jsonPath("$._links./authors.href").value("http://localhost/authors"));
     }
 
     @Test
     public void givenExistingAuthor_thenAuthorRetrieved_getAuthorById() throws Exception {
         //given
-        final AuthorRecord author = new AuthorRecord(1L, "name", "surname", "country", 94020600570L, false);
+        final AuthorDTO author = new AuthorDTO(1L, "name", "surname", "country", 94020600570L, false);
         given(this.authorService.getById(1L)).willReturn(Optional.of(author));
 
         //when
@@ -105,7 +105,7 @@ public class AuthorControllerTest {
     @Test
     public void createAuthor_thenReturnAuthorLinkToIt_postNewAuthor() throws Exception {
         //given
-        final AuthorRecord author = new AuthorRecord(1L, "name", "surname", "country", 94020600570L, false);
+        final AuthorDTO author = new AuthorDTO(1L, "name", "surname", "country", 94020600570L, false);
         given(this.authorService.createAuthor(any())).willReturn(author);
 
         //when
@@ -126,7 +126,7 @@ public class AuthorControllerTest {
     @Test
     public void updateAuthor_thenReturnAuthorLinkToIt_putAuthor() throws Exception {
         //given
-        final AuthorRecord author = new AuthorRecord(1L, "name", "surname", "country", 94020600570L, false);
+        final AuthorDTO author = new AuthorDTO(1L, "name", "surname", "country", 94020600570L, false);
         given(this.authorService.updateAuthor(any(), any())).willReturn(author);
 
         //when
@@ -147,7 +147,7 @@ public class AuthorControllerTest {
     @Test
     public void patchAuthor_thenReturnAuthorLinkToIt_patchAuthor() throws Exception {
         //given
-        final AuthorRecord author = new AuthorRecord(1L, "name", "surname", "country", 94020600570L, false);
+        final AuthorDTO author = new AuthorDTO(1L, "name", "surname", "country", 94020600570L, false);
         given(this.authorService.patchAlive(false, 1L)).willReturn(author);
 
         //when
@@ -163,5 +163,39 @@ public class AuthorControllerTest {
                 .andExpect(jsonPath("$.alive").value(false))
                 .andExpect(jsonPath("$._links.self.href").value("http://localhost/authors/1"))
                 .andExpect(jsonPath("$._links./authors.href").value("http://localhost/authors"));
+    }
+
+    @Test
+    public void createAuthorWrongPesel_thenReturnValidationErrorMessage() throws Exception {
+        String authorJson = "{" +
+                "\"id\": 81," +
+                "\"name\": \"Piotr\"," +
+                "\"surname\": \"Kaniewski\"," +
+                "\"country\": \"Poland\"," +
+                "\"pesel\": -12," +
+                "\"alive\": false" +
+                "}";
+
+        this.mvc.perform(post("/authors")
+                .contentType(MediaType.APPLICATION_JSON).content(authorJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors").value("The PESEL can't be a negative value"));
+    }
+
+    @Test
+    public void createAuthorEmptyNameAndSurname_thenReturnValidationErrorMessage() throws Exception {
+        String authorJson = "{" +
+                "\"id\": 81," +
+                "\"name\": \"\"," +
+                "\"surname\": \"Kaniewski\"," +
+                "\"country\": \"Poland\"," +
+                "\"pesel\": 49032045991," +
+                "\"alive\": false" +
+                "}";
+
+        this.mvc.perform(post("/authors")
+                .contentType(MediaType.APPLICATION_JSON).content(authorJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[:1]").value("You have to provide a correct name"));
     }
 }
