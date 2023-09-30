@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PeselReservationValidator
-        implements ConstraintValidator<ValidPesel, Long> {
+        implements ConstraintValidator<PeselValid, Long> {
 
     private static final String regexp = "^[0-9]{11}$";
 

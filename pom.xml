@@ -16,6 +16,7 @@
     <properties>
         <java.version>17</java.version>
         <springdoc.version>2.1.0</springdoc.version>
+        <testng.version>7.3.0</testng.version>
     </properties>
     <dependencies>
         <dependency>
@@ -66,7 +67,7 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.3.0</version>
+            <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
 

@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ FIELD })
 @Retention(RUNTIME)
 @Documented
-public @interface ValidPesel {
+public @interface PeselValid {
     String message() default "Please, provide a valid PESEL";
 
     Class<?>[] groups() default {};

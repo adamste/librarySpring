@@ -22,13 +22,12 @@ import pl.stepien.libraryspring.author.service.AuthorService;
 @RequiredArgsConstructor
 public class AuthorController
 {
-    private final AuthorService authorService;
+    private AuthorService authorService;
 
     @GetMapping(value = "/authors")
     public ResponseEntity<CollectionModel<AuthorDTO>> getAll()
     {
-        final List<AuthorDTO> authorsRecords = authorService.getAuthorsRecords();
-        return ResponseEntity.status(HttpStatus.OK).body(CollectionModel.of(authorsRecords,
+        return ResponseEntity.status(HttpStatus.OK).body(CollectionModel.of(authorService.getAuthorsRecords(),
                                                                             linkTo(
                                                                                 methodOn(AuthorController.class).getAll())
                                                                                 .withRel("/authors")));
@@ -48,7 +47,7 @@ public class AuthorController
     @PostMapping("/authors")
     public ResponseEntity<EntityModel<AuthorDTO>> createAuthor(@Valid @RequestBody AuthorDTO author)
     {
-        final AuthorDTO record = authorService.createAuthor(author);
+        AuthorDTO record = authorService.createAuthor(author);
         return ResponseEntity.ok().body(
             EntityModel.of(record,
                            linkTo(methodOn(AuthorController.class).getAuthor(record.getId())).withSelfRel(),

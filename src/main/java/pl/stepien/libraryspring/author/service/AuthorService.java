@@ -21,28 +21,25 @@ public class AuthorService
     public List<AuthorDTO> getAuthorsRecords()
     {
         return authorRepository.findAll().stream()
-                               .map(entity ->
-                                        new AuthorDTO(entity.getId(), entity.getName(), entity.getSurname(),
-                                                         entity.getCountry(), entity.getPesel(), entity.isAlive()))
+                               .map(this::mapEntityToDTO)
                                .collect(Collectors.toList());
     }
 
     public Optional<AuthorDTO> getById(long id)
     {
-        return authorRepository.findById(id).map(
-            a -> new AuthorDTO(a.getId(), a.getName(), a.getSurname(), a.getCountry(), a.getPesel(), a.isAlive()));
+        return authorRepository.findById(id).map(this::mapEntityToDTO);
     }
 
     public AuthorDTO createAuthor(AuthorDTO author)
     {
         final Author entity = authorRepository.save(Author.Factory.create(author));
-        return new AuthorDTO(entity.getId(), entity.getName(), entity.getSurname(), entity.getCountry(), entity.getPesel(),
-                                entity.isAlive());
+        return mapEntityToDTO(entity);
     }
 
     public AuthorDTO updateAuthor(AuthorDTO author, Long id)
     {
-        final Author authorFromDB = authorRepository.findById(id).orElseThrow(() -> new AuthorNotFoundException("Won't update since no such user"));
+        final Author authorFromDB = authorRepository.findById(id)
+                .orElseThrow(() -> new AuthorNotFoundException("Won't update since no such user"));
 
         authorFromDB.setId(author.getId());
         authorFromDB.setName(author.getName());
@@ -52,14 +49,12 @@ public class AuthorService
         authorFromDB.setAlive(author.isAlive());
 
         final Author entity = authorRepository.save(authorFromDB);
-        return new AuthorDTO(entity.getId(), entity.getName(), entity.getSurname(), entity.getCountry(), entity.getPesel(),
-                                entity.isAlive());
+        return mapEntityToDTO(entity);
     }
 
     public void deleteAuthor(long id)
     {
-        final boolean exists = authorRepository.existsById(id);
-        if (exists)
+        if (authorRepository.existsById(id))
         {
             authorRepository.deleteById(id);
         }
@@ -68,18 +63,15 @@ public class AuthorService
 
     public AuthorDTO patchAlive(boolean isAlive, long id)
     {
-        final Optional<Author> entity = authorRepository.findById(id);
-        if (entity.isPresent())
-        {
-            final Author author = entity.get();
-            author.setAlive(isAlive);
-            authorRepository.save(author);
-            return new AuthorDTO(author.getId(), author.getName(), author.getSurname(),
-                                    author.getCountry(), author.getPesel(), author.isAlive());
-        }
-        else
-        {
-            throw new AuthorNotFoundException("Won't patch since no such user");
-        }
+        final Author author = authorRepository.findById(id)
+                .orElseThrow(() -> new AuthorNotFoundException("Won't update since no such user"));
+        author.setAlive(isAlive);
+        authorRepository.save(author);
+        return mapEntityToDTO(author);
+    }
+
+    private AuthorDTO mapEntityToDTO(Author entity) {
+        return new AuthorDTO(entity.getId(), entity.getName(), entity.getSurname(),
+                entity.getCountry(), entity.getPesel(), entity.isAlive());
     }
 }
