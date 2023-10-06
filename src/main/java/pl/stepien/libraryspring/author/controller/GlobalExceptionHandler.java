@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 import pl.stepien.libraryspring.author.exceptions.AuthorNotFoundException;
 
 import java.util.HashMap;
@@ -19,11 +18,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
-{
+class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthorNotFoundException.class)
-    public ResponseEntity<Object> handleUserException(AuthorNotFoundException e)
-    {
+    public ResponseEntity<Object> handleUserException(AuthorNotFoundException e) {
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 

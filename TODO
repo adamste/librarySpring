@@ -12,6 +12,9 @@ https://www.restapitutorial.com/
 https://restfulapi.net/richardson-maturity-model/ (4 stopnie dojrzałości resta)
 //@Transactional (readonly, rollbackFor, propagation, isolation(4 rodzaje))
 //co to find/get/load w jpa
+https://microservices.io/patterns/data/saga.html - wzorce architektoniczne
+https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/saga/saga - wzorce architektoniczne
+https://www.youtube.com/watch?v=f8zaYDJctTA - just in time compiler
 
 ============
 do ogarnięcia
@@ -43,8 +46,6 @@ do ogarnięcia
 
 
               ----------------
-dodac walidacje na poziomie controllerow
-
 test containers:
 implementuje ApplicationContextInitializer<GenericApplicationContext>
 
@@ -53,16 +54,10 @@ webclient do tego api
 dodac model ksiazek(rozszerzyc baze danych) mamy isbny
 *znaleźć jakieś API dot książek (mam: https://openlibrary.org/swagger/docs#/search/read_search_authors_json_search_authors_json_get)
     **użyć go w projekcie(webclient)
-    **użyć drugiego API i zwrócić ich wyniki za pomocą Featre z java.util.concurrent
+    **użyć drugiego API i zwrócić ich wyniki za pomocą Feature z java.util.concurrent
     **użyć wiremock
 
-dockeryzacja
-
-
-struktura w odpowiedziach z bledami do testow AuthorControllerTest
-
-
-//walidacja czy pesel pasuje do daty urodzenia
+struktura w odpowiedziach z bledami do testow AuthorControllerTest?? context nie widzi mojego @ControllerAdvice
 
 *dopisz testy
 
@@ -73,3 +68,19 @@ struktura w odpowiedziach z bledami do testow AuthorControllerTest
 *test containers
 
 *inmemory repository
+
+
+
+
+
+
+
+///////
+
+wzorce projektowe:
+-porty i adaptery
+-clean architecture
+-saga orkiestracja
+-saga choreografia
+-outbox pattern
+

@@ -1,16 +1,14 @@
 package pl.stepien.libraryspring.author.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import pl.stepien.libraryspring.author.exceptions.AuthorNotFoundException;
 import pl.stepien.libraryspring.author.model.Author;
 import pl.stepien.libraryspring.author.model.AuthorDTO;
 import pl.stepien.libraryspring.author.repository.AuthorRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,25 +19,24 @@ public class AuthorService
     public List<AuthorDTO> getAuthorsRecords()
     {
         return authorRepository.findAll().stream()
-                               .map(this::mapEntityToDTO)
+                .map(AuthorMapper::mapEntityToDTO)
                                .collect(Collectors.toList());
     }
 
-    public Optional<AuthorDTO> getById(long id)
-    {
-        return authorRepository.findById(id).map(this::mapEntityToDTO);
+    public AuthorDTO getById(long id) {
+        return authorRepository.findById(id)
+                .map(AuthorMapper::mapEntityToDTO)
+                .orElseThrow(() -> AuthorNotFoundException.NO_ID);
     }
 
     public AuthorDTO createAuthor(AuthorDTO author)
     {
-        final Author entity = authorRepository.save(Author.Factory.create(author));
-        return mapEntityToDTO(entity);
+        return AuthorMapper.mapEntityToDTO(authorRepository.save(Author.Factory.create(author)));
     }
 
     public AuthorDTO updateAuthor(AuthorDTO author, Long id)
     {
-        final Author authorFromDB = authorRepository.findById(id)
-                .orElseThrow(() -> new AuthorNotFoundException("Won't update since no such user"));
+        Author authorFromDB = authorRepository.findById(id).orElseThrow(() -> AuthorNotFoundException.NO_UPDATE);
 
         authorFromDB.setId(author.getId());
         authorFromDB.setName(author.getName());
@@ -48,8 +45,7 @@ public class AuthorService
         authorFromDB.setPesel(author.getPesel());
         authorFromDB.setAlive(author.isAlive());
 
-        final Author entity = authorRepository.save(authorFromDB);
-        return mapEntityToDTO(entity);
+        return AuthorMapper.mapEntityToDTO(authorRepository.save(authorFromDB));
     }
 
     public void deleteAuthor(long id)
@@ -58,20 +54,14 @@ public class AuthorService
         {
             authorRepository.deleteById(id);
         }
-        throw new AuthorNotFoundException("Won't delete since no such user");
+        throw AuthorNotFoundException.NO_DELETE;
     }
 
     public AuthorDTO patchAlive(boolean isAlive, long id)
     {
-        final Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new AuthorNotFoundException("Won't update since no such user"));
+        Author author = authorRepository.findById(id).orElseThrow(() -> AuthorNotFoundException.NO_UPDATE);
         author.setAlive(isAlive);
         authorRepository.save(author);
-        return mapEntityToDTO(author);
-    }
-
-    private AuthorDTO mapEntityToDTO(Author entity) {
-        return new AuthorDTO(entity.getId(), entity.getName(), entity.getSurname(),
-                entity.getCountry(), entity.getPesel(), entity.isAlive());
+        return AuthorMapper.mapEntityToDTO(author);
     }
 }

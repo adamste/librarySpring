@@ -10,11 +10,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import pl.stepien.libraryspring.author.exceptions.AuthorNotFoundException;
 import pl.stepien.libraryspring.author.model.AuthorDTO;
 import pl.stepien.libraryspring.author.service.AuthorService;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -68,7 +68,7 @@ public class AuthorControllerTest {
     public void givenExistingAuthor_thenAuthorRetrieved_getAuthorById() throws Exception {
         //given
         final AuthorDTO author = new AuthorDTO(1L, "name", "surname", "country", 94020600570L, false);
-        given(this.authorService.getById(1L)).willReturn(Optional.of(author));
+        given(this.authorService.getById(1L)).willReturn(author);
 
         //when
         final MockHttpServletRequestBuilder result = get("/authors/" + 1L);
@@ -89,7 +89,7 @@ public class AuthorControllerTest {
     @Test
     public void givenNonExistingAuthor_then404_getAuthorById() throws Exception {
         //given
-        given(this.authorService.getById(1L)).willReturn(Optional.empty());
+        given(this.authorService.getById(1L)).willThrow(AuthorNotFoundException.NO_ID);
         //when
         ResultActions actions = this.mvc.perform(get("/authors/" + 1L));
         //then

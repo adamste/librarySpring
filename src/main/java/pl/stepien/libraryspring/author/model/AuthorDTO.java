@@ -11,15 +11,14 @@ import pl.stepien.libraryspring.validator.PeselValid;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class AuthorDTO
-{
-    private Long id;
+public class AuthorDTO {
+    private final Long id;
     @NotBlank(message = "You have to provide a correct name")
-    private String name;
+    private final String name;
     @NotBlank(message = "You have to provide a correct surname")
-    private String surname;
-    private String country;
+    private final String surname;
+    private final String country;
     @PeselValid
-    private Long pesel;
-    private boolean isAlive;
+    private final Long pesel;
+    private final boolean isAlive;
 }
