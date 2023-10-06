@@ -37,4 +37,3 @@ build/
 /librarySpring.iml
 /.mvn/wrapper/maven-wrapper.properties
 /.mvn/wrapper/maven-wrapper.jar
-/docker/librarySpring-0.0.1-SNAPSHOT.jar
