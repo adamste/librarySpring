@@ -1,6 +1,6 @@
 FROM openjdk:17-jdk-alpine
 MAINTAINER adam.stepien1@gmail.com
 
-COPY target/nazwa.jar nazwa.jar
+COPY target/librarySpring-0.0.1-SNAPSHOT.jar librarySpring-0.0.1-SNAPSHOT.jar
 
-ENTRYPOINT ["java", "-jar", "/nazwa.jar"]
+ENTRYPOINT ["java", "-jar", "/librarySpring-0.0.1-SNAPSHOT.jar", "--spring.profiles.active=docker-compose"]

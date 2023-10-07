@@ -1,0 +1,23 @@
+version: '2'
+services:
+  java-server:
+    container_name: libraryApp
+    build:
+      context: ..
+      dockerfile: docker/DockerfileJava
+    image: library-app-server:latest
+    ports:
+      - 8080:8080
+    networks:
+      - bridged-network
+  database-server:
+    container_name: libraryAppDB
+    build:
+      context: ..
+      dockerfile: docker/DockerfilePostgres
+    image: library-app-database:latest
+    networks:
+      - bridged-network
+networks:
+  bridged-network:
+    driver: bridge
