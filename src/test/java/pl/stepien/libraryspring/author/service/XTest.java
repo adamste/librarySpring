@@ -17,7 +17,7 @@ class XTest {
         2. make a request
         3. handle the response
          */
-
+//sensowne źródło:  https://www.amitph.com/spring-webclient-request-parameters/
         WebClient client = WebClient.builder()
                 .baseUrl("https://openlibrary.org/api")
                 .build();
