@@ -1,18 +1,13 @@
 package pl.stepien.libraryspring.author.service;
 
 import com.google.gson.*;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.converter.json.GsonBuilderUtils;
-import org.springframework.http.converter.json.GsonFactoryBean;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collections;
 
 @ExtendWith(MockitoExtension.class)
 class XTest {
