@@ -1,24 +1,18 @@
 package pl.stepien.libraryspring.author.model;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import pl.stepien.libraryspring.validator.PeselValid;
 
-@Getter
-@AllArgsConstructor
-@ToString
-@EqualsAndHashCode
+@Value
 public class AuthorDTO {
-    private final Long id;
+    Long id;
     @NotBlank(message = "You have to provide a correct name")
-    private final String name;
+    String name;
     @NotBlank(message = "You have to provide a correct surname")
-    private final String surname;
-    private final String country;
+    String surname;
+    String country;
     @PeselValid
-    private final Long pesel;
-    private final boolean isAlive;
+    Long pesel;
+    boolean isAlive;
 }
